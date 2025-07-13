@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using KodeNest.Entity;
-using KodeNest.Repository.Implementation;
+﻿using Entity.Entity.Home;
+using KodeNest.Repository.Interface;
 using KodeNest.Service.Interface;
 
 namespace KodeNest.Service.Implementation;

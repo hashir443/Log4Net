@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using KodeNest.Entity;
+using Entity.Entity.Home;
 using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext

@@ -1,71 +1,58 @@
-﻿using System.Threading.Tasks;
-using KodeNest.Entity;
+﻿using Entity.Entity.Home;
 using KodeNest.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 
-public class HomeController : Controller
+namespace KodeNest.Controllers
 {
-    private readonly IHomeService _service;
-
-    public HomeController(IHomeService service)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class HomeApiController : ControllerBase
     {
-        _service = service;
-    }
+        private readonly IHomeService _service;
 
-    public async Task<ActionResult> Index()
-    {
-        var homes = await _service.GetAllAsync();
-        return View(homes);
-    }
-
-    public async Task<ActionResult> Details(int id)
-    {
-        var home = await _service.GetByIdAsync(id);
-        return View(home);
-    }
-
-    public ActionResult Create() => View();
-
-    [HttpPost]
-    public async Task<ActionResult> Create(HomeRequest request)
-    {
-        if (!ModelState.IsValid) return View(request);
-
-        await _service.CreateAsync(request);
-        return RedirectToAction("Index");
-    }
-
-    public async Task<ActionResult> Edit(int id)
-    {
-        var existing = await _service.GetByIdAsync(id);
-        if (existing == null) return HttpNotFound();
-
-        return View(new HomeRequest
+        public HomeApiController(IHomeService service)
         {
-            Title = existing.Title,
-            Address = existing.Address
-        });
-    }
+            _service = service;
+        }
 
-    [HttpPost]
-    public async Task<ActionResult> Edit(int id, HomeRequest request)
-    {
-        if (!ModelState.IsValid) return View(request);
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var homes = await _service.GetAllAsync();
+            return Ok(homes);
+        }
 
-        await _service.UpdateAsync(id, request);
-        return RedirectToAction("Index");
-    }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var home = await _service.GetByIdAsync(id);
+            if (home == null) return NotFound();
+            return Ok(home);
+        }
 
-    public async Task<ActionResult> Delete(int id)
-    {
-        var home = await _service.GetByIdAsync(id);
-        return View(home);
-    }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] HomeRequest request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-    [HttpPost, ActionName("Delete")]
-    public async Task<ActionResult> DeleteConfirmed(int id)
-    {
-        await _service.DeleteAsync(id);
-        return RedirectToAction("Index");
+            await _service.CreateAsync(request);
+            return Ok(new { message = "Created successfully" });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] HomeRequest request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            await _service.UpdateAsync(id, request);
+            return Ok(new { message = "Updated successfully" });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _service.DeleteAsync(id);
+            return Ok(new { message = "Deleted successfully" });
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using KodeNest.Entity;
+﻿using Entity.Entity.Home;
 
 namespace KodeNest.Service.Interface;
 public interface IHomeService

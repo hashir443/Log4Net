@@ -1,6 +1,6 @@
 ﻿using System.Data;
-using DataLogger.Entity;
-using DataLogger.Enums;
+using Entity.Entity;
+using Entity.Enums;
 using log4net;
 using Microsoft.Data.SqlClient;
 
@@ -39,7 +39,7 @@ namespace DataLogger
 
             try
             {
-                await _dbHelper.ExecuteStoredProcedureAsync("Log.InsertLog", parameters =>
+                await _dbHelper.ExecuteStoredProcedureAsync("[Log].[InsertApplicationLog]", parameters =>
                 {
                     parameters.AddWithValue("@MethodName", payload.MethodName);
                     parameters.AddWithValue("@LogMessage", payload.LogMessage);
@@ -62,19 +62,19 @@ namespace DataLogger
 
             switch (payload.LogType)
             {
-                case LogType.Debugging:
+                case (Entity.Enums.LogType)LogType.Debugging:
                     _logger.Debug(logText);
                     break;
-                case LogType.Information:
+                case (Entity.Enums.LogType)LogType.Information:
                     _logger.Info(logText);
                     break;
-                case LogType.Warning:
+                case (Entity.Enums.LogType)LogType.Warning:
                     _logger.Warn(logText);
                     break;
-                case LogType.Error:
+                case (Entity.Enums.LogType)LogType.Error:
                     _logger.Error(logText);
                     break;
-                case LogType.Critical:
+                case (Entity.Enums.LogType)LogType.Critical:
                     _logger.Fatal(logText);
                     break;
             }

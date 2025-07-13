@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using KodeNest.Entity;
+﻿using Entity.Entity.Home;
 
-namespace KodeNest.Repository.Implementation;
+namespace KodeNest.Repository.Interface;
 public interface IHomeRepository
 {
     Task<List<HomeResponse>> GetAllAsync();
