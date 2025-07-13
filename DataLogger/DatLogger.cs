@@ -59,24 +59,33 @@ namespace DataLogger
         private void SaveLogToFile(LogPayload payload)
         {
             var logText = $"[{payload.MethodName}] {payload.LogType}: {payload.LogMessage} | Extra: {payload.ExtraInformation}";
-
-            switch (payload.LogType)
+            try
             {
-                case (Entity.Enums.LogType)LogType.Debugging:
-                    _logger.Debug(logText);
-                    break;
-                case (Entity.Enums.LogType)LogType.Information:
-                    _logger.Info(logText);
-                    break;
-                case (Entity.Enums.LogType)LogType.Warning:
-                    _logger.Warn(logText);
-                    break;
-                case (Entity.Enums.LogType)LogType.Error:
-                    _logger.Error(logText);
-                    break;
-                case (Entity.Enums.LogType)LogType.Critical:
-                    _logger.Fatal(logText);
-                    break;
+                switch (payload.LogType)
+                {
+                    case (Entity.Enums.LogType)LogType.Debugging:
+                        _logger.Debug(logText);
+                        break;
+                    case (Entity.Enums.LogType)LogType.Information:
+                        _logger.Info(logText);
+                        break;
+                    case (Entity.Enums.LogType)LogType.Warning:
+                        _logger.Warn(logText);
+                        break;
+                    case (Entity.Enums.LogType)LogType.Error:
+                        _logger.Error(logText);
+                        break;
+                    case (Entity.Enums.LogType)LogType.Critical:
+                        _logger.Fatal(logText);
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Fallback logging if DB logging fails
+                Console.Error.WriteLine($"[LOGGING FAILED] Could not log to DB: {ex.Message}");
+                // You can fallback to file logging here
             }
         }
     }
