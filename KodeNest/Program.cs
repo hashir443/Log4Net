@@ -37,8 +37,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<DatLogger>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();
-    //var connStr = config.GetConnectionString("DefaultConnection");
-    return new DatLogger();
+    var connStr = config.GetConnectionString("DefaultConnection");
+    return new DatLogger(connStr);
 });
 
 // ✅ Register repository & service layers

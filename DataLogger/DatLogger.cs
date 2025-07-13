@@ -58,34 +58,37 @@ namespace DataLogger
 
         private void SaveLogToFile(LogPayload payload)
         {
-            var logText = $"[{payload.MethodName}] {payload.LogType}: {payload.LogMessage} | Extra: {payload.ExtraInformation}";
             try
             {
+                // Serialize the entire object to JSON
+                var jsonLog = System.Text.Json.JsonSerializer.Serialize(payload, new System.Text.Json.JsonSerializerOptions
+                {
+                    WriteIndented = false
+                });
+
+                // Log as JSON based on severity
                 switch (payload.LogType)
                 {
-                    case (Entity.Enums.LogType)LogType.Debugging:
-                        _logger.Debug(logText);
+                    case LogType.Debugging:
+                        _logger.Debug(jsonLog);
                         break;
-                    case (Entity.Enums.LogType)LogType.Information:
-                        _logger.Info(logText);
+                    case LogType.Information:
+                        _logger.Info(jsonLog);
                         break;
-                    case (Entity.Enums.LogType)LogType.Warning:
-                        _logger.Warn(logText);
+                    case LogType.Warning:
+                        _logger.Warn(jsonLog);
                         break;
-                    case (Entity.Enums.LogType)LogType.Error:
-                        _logger.Error(logText);
+                    case LogType.Error:
+                        _logger.Error(jsonLog);
                         break;
-                    case (Entity.Enums.LogType)LogType.Critical:
-                        _logger.Fatal(logText);
+                    case LogType.Critical:
+                        _logger.Fatal(jsonLog);
                         break;
                 }
-
             }
             catch (Exception ex)
             {
-                // Fallback logging if DB logging fails
-                Console.Error.WriteLine($"[LOGGING FAILED] Could not log to DB: {ex.Message}");
-                // You can fallback to file logging here
+                Console.Error.WriteLine($"[LOGGING FAILED] Could not log to file: {ex.Message}");
             }
         }
     }
